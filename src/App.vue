@@ -22,9 +22,42 @@ export default {
 
   created() {
 
-    this.$http.get('https://api.opendota.com/api/heroes/')
-      .then(res => res.json())
-      .then(heroes => this.heroes = heroes, err => console.log(err));
+    if(localStorage.getItem('localHeroStats')){
+
+      let localHeroStats = localStorage.getItem('localHeroStats');
+      this.heroes = JSON.parse(localHeroStats);
+      console.log('Consumiu os dados do LocalStorage');
+
+    } else {
+
+      //https://api.opendota.com/api/heroStats/
+      // Retorna uma promessa
+      let promise = this.$http.get('https://api.opendota.com/api/heroStats/');
+
+      // Resposta da promessa (res)
+      // Res.body retorna os dados
+      // Salva no localStorage
+      /*promise.then(res => {
+
+        res.json().then(heroes => {
+
+          localStorage.setItem('localHeroStats', JSON.stringify(heroes));
+
+        });
+
+      });*/
+
+      promise.then(res => {
+        
+        this.heroes = res.body;
+        localStorage.setItem('localHeroStats', JSON.stringify(res.body));
+        console.log('Consumiu os dados da API');
+        
+      
+      }, err => console.log(err));
+
+
+    }
 
   },
 
@@ -65,20 +98,16 @@ export default {
     display: inline-block;
     width: 20%;
   }
-
-  p {
-    
-  }
   
   .painel-hero {
     padding: 10px;
     background-color: #8080805e;
     transition-property: all;
-    transition-duration: .5s;
+    transition-duration: .2s;
     color: #fff;
   }
   .painel-hero:hover {
-    background-color: gray;
+    background-color: #7070705e;
   }
 
   .img-responsiva {
