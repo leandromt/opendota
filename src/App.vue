@@ -3,12 +3,14 @@
     <h1 class="centralizado">{{ titulo }}</h1>
     <ul class="lista-heroes">
       <li v-for="hero of heroes" v-bind:key="hero.id">
-        <div class="painel-hero">
+        <div class="painel-hero" v-on:mouseover="mouseOver(hero.id)" v-on:mouseleave="mouseLeave()">
           <img class="img-responsiva" :src="heroImg(hero.id)" :alt="hero.localized_name">
+          <div class="painel-info" :class="getClassAttribute(hero.primary_attr)">
           <p><strong>ID:</strong> <span>{{ hero.id }}</span></p>
           <p><strong>Name:</strong> <span>{{ hero.localized_name }}</span></p>
           <p><strong>Attribute:</strong> <span>{{ hero.primary_attr }}</span></p>
           <p><strong>Attack:</strong> <span>{{ hero.attack_type }}</span></p>
+          </div>
         </div>
       </li>
     </ul>  
@@ -21,6 +23,8 @@ export default {
   name: 'app',
 
   created() {
+
+    document.body.style.backgroundImage = 'url(src/assets/img/bg/bg-dota2.jpg)';
 
     if(localStorage.getItem('localHeroStats')){
 
@@ -70,9 +74,24 @@ export default {
   },
   
   methods: {
+    
     heroImg(id){
-      return 'src/assets/heroes/' + id + '.png';
+      return 'src/assets/img/heroes/' + id + '.png';
+    },
+
+    mouseOver(id){
+      document.body.style.backgroundImage = 'url(src/assets/img/wallpapers/' + id + '.jpg)';
+    },
+
+    mouseLeave(){
+      document.body.style.backgroundImage = 'url(src/assets/img/bg/bg-dota2.jpg)';
+    },
+
+    getClassAttribute(attribute){
+      return 'painel-info-' + attribute;
     }
+
+
   }
 
 
@@ -101,19 +120,63 @@ export default {
   
   .painel-hero {
     padding: 10px;
-    background-color: #8080805e;
+    background-color: #80808060;
     transition-property: all;
     transition-duration: .2s;
     color: #fff;
   }
   .painel-hero:hover {
-    background-color: #7070705e;
+    background-color: #707070de;
+  }
+
+  .painel-info {
+    position: relative;
+  }
+  
+  .painel-info::before {
+    display: block;
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 0;
+    background-size: 100%;
+  }
+
+  .painel-info-str::before {
+    background-image: url('./assets/img/attributes/str.png');
+  }
+
+  .painel-info-int::before {
+    background-image: url('./assets/img/attributes/int.png');
+  }
+
+  .painel-info-agi::before {
+    background-image: url('./assets/img/attributes/agi.png');
   }
 
   .img-responsiva {
     width: 100%;
   }
 
+  /*  MEDIA QUERY  */
+  @media (max-width: 1200px) {
+      li {
+        width: 33.33%;
+      }
+  }
+
+  @media (max-width: 768px) {
+      li {
+        width: 50%;
+      }
+  }
+  
+  @media (max-width: 480px) {
+      li {
+        width: 100%;
+      }
+  }
   
 
 </style>

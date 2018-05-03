@@ -1,0 +1,11 @@
+body{
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: normal;
+    background-color: #3a3a3a;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: 100%;
+    background-size: cover;
+    background-attachment: fixed;
+    transition: all;
+}
