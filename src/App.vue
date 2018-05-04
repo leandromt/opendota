@@ -3,7 +3,7 @@
     <h1 class="centralizado">{{ titulo }}</h1>
     <ul class="lista-heroes">
       <li v-for="hero of heroes" v-bind:key="hero.id">
-        <div class="painel-hero" v-on:mouseover="mouseOver(hero.id)" v-on:mouseleave="mouseLeave()">
+        <div class="painel-hero" v-on:mouseover="mouseOver(hero.id, hero.localized_name)" v-on:mouseleave="mouseLeave()">
           <img class="img-responsiva" :src="heroImg(hero.id)" :alt="hero.localized_name">
           <div class="painel-info" :class="getClassAttribute(hero.primary_attr)">
           <p><strong>ID:</strong> <span>{{ hero.id }}</span></p>
@@ -13,7 +13,8 @@
           </div>
         </div>
       </li>
-    </ul>  
+    </ul>
+
   </div>
 </template>
 
@@ -68,6 +69,7 @@ export default {
   data () {
     return {
       titulo: 'DotA 2 - All Heroes',
+      titulo_original: 'DotA 2 - All Heroes',
       subtitulo: 'All Heroes',
       heroes: []
     }
@@ -79,12 +81,14 @@ export default {
       return 'src/assets/img/heroes/' + id + '.png';
     },
 
-    mouseOver(id){
+    mouseOver(id, name){
       document.body.style.backgroundImage = 'url(src/assets/img/wallpapers/' + id + '.jpg)';
+      this.titulo = name;
     },
 
     mouseLeave(){
       document.body.style.backgroundImage = 'url(src/assets/img/bg/bg-dota2.jpg)';
+      this.titulo = this.titulo_original;
     },
 
     getClassAttribute(attribute){
@@ -124,7 +128,9 @@ export default {
     transition-property: all;
     transition-duration: .2s;
     color: #fff;
+    cursor: pointer;
   }
+
   .painel-hero:hover {
     background-color: #707070de;
   }
@@ -159,6 +165,9 @@ export default {
     width: 100%;
   }
 
+
+
+  
   /*  MEDIA QUERY  */
   @media (max-width: 1200px) {
       li {
